@@ -1,8 +1,15 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-
+import { AuthContext } from '../../Providers/AuthProvider';
+import { FaShoppingCart } from "react-icons/fa";
 const NavBar = () => {
+    const {user, logout} = useContext(AuthContext)
+    const handleLogout = ()=>{
+        logout()
+        .then(()=>{})
+        .catch(error => console.log(error))
+    }
     const navOption = 
     <>
         <li><Link to='/'>Home</Link></li>
@@ -10,8 +17,17 @@ const NavBar = () => {
         <li><Link to='dashboard'>Dashboard</Link></li>
         <li><Link to='Menu'>Our Menu</Link></li>
         <li><Link to='/order/salad'>Our Shop</Link></li>
-        <li><Link to='login'>Login</Link></li>
-
+        <li>
+            <Link to='/'>
+                <button className='btn gap-2'>
+                    <FaShoppingCart/>
+                    <div className='badge badge-secondary'>+0</div>
+                </button>
+            </Link>
+        </li>
+        {
+            user ? <><button onClick={handleLogout} className='btn btn-ghost'>Logout</button></> : <> <li><Link to='login'>Login</Link></li></>
+        }
     </>
     return (
         <div>
@@ -33,6 +49,11 @@ const NavBar = () => {
                     </ul>
                 </div>
                 <div className="navbar-end">
+                {user && (
+                    <div className="profile mb-1 mr-5">
+                      <img className="w-12 h-12 rounded-full" src={user.photoURL} />
+                    </div>
+                  )}
                     <a className="btn">Get started</a>
                 </div>
             </div>
